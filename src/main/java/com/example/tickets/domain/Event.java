@@ -47,19 +47,27 @@ public class Event {
     @Enumerated(EnumType.STRING) // The string representation of the enum is stored in the database instead of an integer
     private EventStatusEnum status;
 
-    @ManyToOne(fetch = FetchType.LAZY) // Tells JPA each Event has one User, and a User can organize many events
-    @JoinColumn(name = "organizer_id") // Add a foreign key column in the events table
+    // Relationship with Organizer, Attendee, Staff
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organizer_id") // Add a foreign key column in the Events table.
+    // Note: We add the FK in the Many side of the relationship. The Many side usually OWNS the relationship
     private User organizer;
 
-    @ManyToMany(mappedBy = "attendingEvents")   // This tells JPA that Event does not own the relationship, instead the Users side owns the relationship.
+    @ManyToMany(mappedBy = "attendingEvents")   // mappedBy tells us that Event does not own the relationship, instead the Users side owns the relationship.
     // Hence, we need to implement the jointable on the Users side.
     // The owning side is the single source of truth for writing to the join table.
     // This prevents duplicate inserts, conflicting updates, and inconsistent relationships.
-    private List<User> attendees = new ArrayList<>(); // Keeps track of list of attendees attending this Event
+    private List<User> attendees = new ArrayList<>();
 
     @ManyToMany(mappedBy = "staffingEvents")
     private List<User> staff = new ArrayList<>();
 
+    // Relationship with TicketType
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)  // Non owning entity. This Event entity is mapped by the field named "event" in the TicketType class
+    private List<TicketType> ticketTypes = new ArrayList<>();
+
+
+    // Audit Fields
     @CreatedDate
     @Column(name = "createdAt", updatable = false, nullable = false)
     private LocalDateTime createdAt;

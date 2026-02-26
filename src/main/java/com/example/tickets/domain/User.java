@@ -29,21 +29,30 @@ public class User {
     @Column(name = "email", nullable = false)
     private String email;
 
+    // TODO: Organized events
     @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL) // Any changes made to Event that User references is saved
     private List<Event> organizedEvents = new ArrayList<>();
-    // TODO: Organized events
 
     // TODO: Attending events
     @ManyToMany
-    @JoinTable(
-            name = "event_attendees",
+    @JoinTable(     // Creating the Jointable on the Owning side of the relationship
+            name = "user_attending_events",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "event_id")
     )
     private List<Event> attendingEvents;
 
     // TODO: Staffing events
+    @ManyToMany
+    @JoinTable(
+            name = "user_staffing_events",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id")
+    )
+    private List<Event> staffingEvents;
 
+
+    // Audit Fields
     @CreatedDate
     @Column(name = "createdAt", updatable = false, nullable = false)
     private LocalDateTime createdAt;
