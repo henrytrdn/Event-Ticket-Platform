@@ -325,3 +325,73 @@ object mapping between different layers of our application, while ensuring it wo
 smoothly with Project Lombok. 
 * Specifically, we'll map between DTOs and Entities and vice versa
 
+# User Provisioning
+In this module, we'll implement automatic user creation when users first log in to our
+ticketing platform.
+
+This functionality ensures that user data is properly stored and managed in our database,
+which is essential for tracking ticket purchases and user activity.
+
+## Module Structure
+Create a custom filter for user provisioning
+Configure Spring to use the filter
+Enable JPA audit field annotations
+
+## Learning Objectives
+1. Implement a filter to create new users in the database
+2. Configure Spring to use the user provisioning filter
+3. Enable the created and last updated annotations used in the entity classes
+
+## User Provisioning Filter
+In this lesson, we'll implement a filter that creates new users in our database when they
+first log in, ensuring every authenticated user has a corresponding User in the database.
+
+**Motivation**
+
+When users signs up and logs in through Keycloak, their details are stored and authenticated through
+Keycloak's personal database. Hence, when Keycloak forwards the JWT token to our backend,
+we only know that the user is valid, and is authenticated BUT there is no existing row containing that 
+user in our database.
+
+**Solution**
+
+A user provisioning filter intercepts incoming requests after authentication to check if a
+user exists in our database and creates them if they don't.
+This filter is valuable because it automatically creates user records in our database when
+users first authenticate through Keycloak, without requiring additional API endpoints or
+manual intervention.
+
+**Layers**
+```
+HTTP Request
+↓
+Spring Security authenticates JWT
+↓
+UserProvisioningFilter
+↓
+Controller
+```
+
+# JWT
+JWT is a JSON Web Token which is a compact, secure string that proves a user is authenticated 
+and tells a backend who they are and what they’re allowed to do.
+
+1. User logs in via Keycloak
+2. Server issues a JWT access token to the client
+3. Client (frontend) stores it in memory
+4. Client sents JWT with every request it makes to the backend
+5. Backend verifies token to permit or deny access
+
+A JWT contains three parts:
+```
+HEADER.PAYLOAD.SIGNATURE
+```
+
+**Header**
+* Describes how the token is signed
+
+**Payload**
+* Contains **claims** (information about the user like name, email, role etc)
+
+**Signature**
+* Ensures the token has not been tampered with
