@@ -2,6 +2,7 @@ package com.example.tickets.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.logging.log4j.util.Lazy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -11,35 +12,35 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "ticket_types")
+@Table(name = "ticket")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TicketType {
+public class Ticket {
 
     @Id
     @Column(name = "id", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "price", nullable = false)
-    private Double price;
-
-    @Column(name = "totalAvailable", nullable = true)
-    private Integer totalAvailable;
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TicketStatusEnum status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id")
-    private Event event;
+    @JoinColumn(name = "ticket_type_id")
+    private TicketType ticketType;
 
-    // TODO: Tickets
-    @OneToMany(mappedBy = "ticketType", cascade = CascadeType.ALL)
-    private List<Ticket> tickets = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "purchaser_id")
+    private User purchaser;
+
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
+    private List<TicketValidation> validations = new ArrayList<>();
+
+    // TODO: QrCode
 
     // Audit Fields
     @CreatedDate

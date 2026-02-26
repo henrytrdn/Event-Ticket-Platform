@@ -51,6 +51,7 @@ public class User {
     )
     private List<Event> staffingEvents;
 
+    // TODO: Ticket
 
     // Audit Fields
     @CreatedDate

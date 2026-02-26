@@ -6,40 +6,33 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "ticket_types")
+@Table(name = "ticket_validations")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TicketType {
+public class TicketValidation {
 
     @Id
-    @Column(name = "id", nullable = false, updatable = false)
+    @Column(name = "id",nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TicketValidationStatusEnum status;
 
-    @Column(name = "price", nullable = false)
-    private Double price;
-
-    @Column(name = "totalAvailable", nullable = true)
-    private Integer totalAvailable;
+    @Column(name = "validation_method", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TicketValidationMethodEnum validationMethod;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id")
-    private Event event;
-
-    // TODO: Tickets
-    @OneToMany(mappedBy = "ticketType", cascade = CascadeType.ALL)
-    private List<Ticket> tickets = new ArrayList<>();
+    @JoinColumn(name = "ticket_id")
+    private Ticket ticket;
 
     // Audit Fields
     @CreatedDate
@@ -49,5 +42,6 @@ public class TicketType {
     @LastModifiedDate
     @Column(name = "updated", nullable = false)
     private LocalDateTime updated;
+
 
 }
