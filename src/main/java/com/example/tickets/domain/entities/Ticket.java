@@ -1,8 +1,7 @@
-package com.example.tickets.domain;
+package com.example.tickets.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.apache.logging.log4j.util.Lazy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
