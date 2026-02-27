@@ -372,6 +372,63 @@ UserProvisioningFilter
 Controller
 ```
 
+# Spring Security Configuration
+We'll configure Spring Security to work with the User Provisioning Filter
+
+```declarative
+@Configuration
+public class SecurityConfig {
+   @Bean
+   public SecurityFilterChain filterChain(
+           HttpSecurity http,
+           UserProvisioningFilter userProvisioningFilter) throws Exception {
+       http
+               .authorizeHttpRequests(authorize ->
+                       // All requests must be authenticated
+                       authorize.anyRequest().authenticated())
+               .csrf(csrf -> csrf.disable())
+               .sessionManagement(session ->
+                       session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+               .oauth2ResourceServer(oauth2 ->
+                       oauth2.jwt(
+                               Customizer.withDefaults()
+                       ))
+               .addFilterAfter(userProvisioningFilter, BearerTokenAuthenticationFilter.class);
+       return http.build();
+   }
+}
+```
+
+Recall Spring Security is responsible for ensuring that only valid users of the appropriate role
+is allowed to proceed with the HTTP request.
+
+**SecurityFilterChain** does this by running a **chain of filters** for every HTTP request.
+The method creates and registers the security filter chain bean that Spring will use automatically at runtime.
+
+In the method, our filter chain involves
+1. Ensuring all users are authenticated 
+2. Disabling csrf because authentication is not cookie based (protects against csrf attacks)
+3. Creating stateless sessions
+4. Validating JWT token
+5. Adding the UserProvisioningFilter to run afterwards
+
+**HttpSecurity** object is a builder used to configure/design how Spring Security protects HTTP requests
+* HttpSecurity = designing the security process for airport security
+* SecurityFilterChain = actual checkpoints passengers pass through
+
+**Stateless/Stateful Sessions**
+
+In a **stateful session**, when a user logs in the server creates a unique session stored in server memory 
+and sends a cookie containing the session ID to the browser. Each HTTP request includes this cookie, allowing 
+the server to look up the session and remember the user. Sessions typically expire after a period of 
+inactivity or after a fixed time, requiring the user to log in again.
+
+In a **stateless** JWT-based system, no session is stored on the server. Instead, after login the identity provider
+(e.g. Keycloak) issues a JWT token to the client. The client includes this token in every HTTP request, and the server 
+verifies it to authenticate the user, remembering their session. Because the token contains the authentication data, the server does not 
+need to store session state. The user does not stay logged in when the access token expires.
+They only stay logged in if a refresh token (or active SSO session) allows the client to obtain a new access token.
+
 # JWT
 JWT is a JSON Web Token which is a compact, secure string that proves a user is authenticated 
 and tells a backend who they are and what they’re allowed to do.
