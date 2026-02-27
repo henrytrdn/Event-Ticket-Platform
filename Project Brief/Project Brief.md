@@ -452,3 +452,5 @@ HEADER.PAYLOAD.SIGNATURE
 
 **Signature**
 * Ensures the token has not been tampered with
+
+# Enable Spring JPA Audit
