@@ -4,7 +4,7 @@ services:
     # Docker will download and run the official PostgreSQL image.
     image: postgres:latest
     ports:
-      - "5432:5432"
+      - "5433:5432" # Inside Docker, Postgres listens to 5432, but connects the db to port 5433
     restart: always
     environment:
       POSTGRES_PASSWORD: changemeinprod!
