@@ -19,5 +19,5 @@ public interface EventMapper {
 
     CreateEventResponseDto toDto(Event event);  // After creating Event in the Service Layer, map a subset of information in
     // the entity to the Response Dto
-    
+
 }
