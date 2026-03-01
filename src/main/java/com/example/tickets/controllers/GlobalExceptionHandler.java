@@ -18,7 +18,7 @@ import java.util.List;
 @Slf4j  // Logger
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(UserNotFoundException.class)
+    @ExceptionHandler(UserNotFoundException.class)  // Triggers when UserNotFoundException raises
     public ResponseEntity<ErrorDto> handleUserNotFoundException(UserNotFoundException ex) {
         log.error("Caught UserNotFoundException", ex);
         ErrorDto errorDto = new ErrorDto();
@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class) // Triggers when @Valid DTO fails
     public ResponseEntity<ErrorDto> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException ex
     ) {
@@ -39,12 +39,12 @@ public class GlobalExceptionHandler {
                 .findFirst()
                 .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
                 .orElse("Validation error occurred");
-
+        // errorMessage specifies the missing field
         errorDto.setError(errorMessage);
         return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
+    @ExceptionHandler(ConstraintViolationException.class)   // Triggers if constraints are not met
     public ResponseEntity<ErrorDto> handleConstraintViolation(
             ConstraintViolationException ex
     ) {
@@ -62,7 +62,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(Exception.class)  // Captures anything not caught by the other handlers
     public ResponseEntity<ErrorDto> handleException(Exception ex) {
         log.error("Caught exception", ex);
         ErrorDto errorDto = new ErrorDto();

@@ -9,6 +9,8 @@ import com.example.tickets.repositories.EventRepository;
 import com.example.tickets.repositories.UserRepository;
 import com.example.tickets.services.EventService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,4 +56,13 @@ public class EventServiceImpl implements EventService {
 
         return eventRepository.save(eventToCreate);
     }
+
+    @Override
+    public Page<Event> listEventsForOrganizer(UUID organizerId, Pageable pageable) {
+        return eventRepository.findByOrganizerId(organizerId, pageable);
+    }
+    // Pageable allows you to load a subset of data instead of all of it
+    // Pageable object defines the Page Number (which page you want), Page Size (how many records per page), Sorting (sort order & fields)
+    // E.g. Frontend requests -> GET /events?organizerId=123&page=0&size=5&sort=date,desc
+    // Spring will build a Pageable object with page = 0, size = 5, sort by date descending
 }

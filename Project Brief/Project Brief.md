@@ -453,4 +453,35 @@ HEADER.PAYLOAD.SIGNATURE
 **Signature**
 * Ensures the token has not been tampered with
 
-# Enable Spring JPA Audit
+# Global Exception Handler
+It centralizes how errors are caught, logged, and returned to the client.
+
+Instead of each controller handling errors individually, this class ensures 
+consistent error responses across the entire application.
+
+@RestControllerAdvice tells Spring:
+
+“If any controller throws an exception, check here for how to handle it.”
+
+So whenever an exception is thrown in any controller or service, Spring 
+looks for a matching @ExceptionHandler method in this class.
+
+**What @Slf4j does**
+* This Lombok annotation creates a logger:
+```
+log.error("message", ex);
+```
+* This logs errors to the console/log files — essential for debugging.
+
+All handlers return:
+```
+ResponseEntity<ErrorDto>
+```
+This means the client receives JSON like:
+
+```
+{
+"error": "User not found"
+}
+```
+This keeps error responses clean and consistent.
