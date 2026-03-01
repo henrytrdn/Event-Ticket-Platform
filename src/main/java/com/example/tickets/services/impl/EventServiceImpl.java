@@ -28,14 +28,18 @@ public class EventServiceImpl implements EventService {
         );
 
         // Convert list of TicketType DTOs to list of TicketType entities
-        List<TicketType> ticketTypesToCreate = event.getTicketTypes().stream().map(ticketType -> {
-            TicketType ticketTypeToCreate = new TicketType();
-            ticketTypeToCreate.setName(ticketType.getName());
-            ticketTypeToCreate.setPrice(ticketType.getPrice());
-            ticketTypeToCreate.setDescription(ticketType.getDescription());
-            ticketTypeToCreate.setTotalAvailable(ticketType.getTotalAvailable());
-            return ticketTypeToCreate;
-        }).toList();
+        List<TicketType> ticketTypesToCreate =
+                event.getTicketTypes()
+                        .stream()
+                        .map(ticketType -> {
+                            TicketType ticketTypeToCreate = new TicketType();
+                            ticketTypeToCreate.setName(ticketType.getName());
+                            ticketTypeToCreate.setPrice(ticketType.getPrice());
+                            ticketTypeToCreate.setDescription(ticketType.getDescription());
+                            ticketTypeToCreate.setTotalAvailable(ticketType.getTotalAvailable());
+
+                            return ticketTypeToCreate;
+                        }).toList();
 
         Event eventToCreate = new Event();
         eventToCreate.setName(event.getName());

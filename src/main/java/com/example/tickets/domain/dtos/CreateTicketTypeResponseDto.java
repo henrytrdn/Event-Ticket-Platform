@@ -1,15 +1,23 @@
-package com.example.tickets.domain;
+package com.example.tickets.domain.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateTicketTypeRequest {  // DTO which maps TicketType entity. Used in the Service Layer
+public class CreateTicketTypeResponseDto {
+    private UUID id;
     private String name;
     private Double price;
     private String description;
     private Integer totalAvailable;
+    private LocalDateTime createdAt;
+    private LocalDateTime updated;
+
+
 }
