@@ -2,11 +2,9 @@ package com.example.tickets.mappers;
 
 import com.example.tickets.domain.CreateEventRequest;
 import com.example.tickets.domain.CreateTicketTypeRequest;
-import com.example.tickets.domain.dtos.CreateEventRequestDto;
-import com.example.tickets.domain.dtos.CreateEventResponseDto;
-import com.example.tickets.domain.dtos.CreateTicketTypeRequestDto;
-import com.example.tickets.domain.dtos.CreateTicketTypeResponseDto;
+import com.example.tickets.domain.dtos.*;
 import com.example.tickets.domain.entities.Event;
+import com.example.tickets.domain.entities.TicketType;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -20,4 +18,7 @@ public interface EventMapper {
     CreateEventResponseDto toDto(Event event);  // After creating Event in the Service Layer, map a subset of information in
     // the entity to the Response Dto
 
+    ListEventTicketTypeResponseDto toDto(TicketType ticketType);
+
+    ListEventResponseDto toListEventResponseDto(Event event);
 }
