@@ -3,6 +3,7 @@ package com.example.tickets.controllers;
 import com.example.tickets.domain.CreateEventRequest;
 import com.example.tickets.domain.dtos.CreateEventRequestDto;
 import com.example.tickets.domain.dtos.CreateEventResponseDto;
+import com.example.tickets.domain.dtos.GetEventDetailsResponseDto;
 import com.example.tickets.domain.dtos.ListEventResponseDto;
 import com.example.tickets.domain.entities.Event;
 import com.example.tickets.mappers.EventMapper;
@@ -52,6 +53,20 @@ public class EventController {
         // This preserves the Page metadata such as total pages, total elements, page number
         // Runs the lambda method inside to map each Event to ListEventResponseDto,
     }
+
+    @GetMapping(path = "/{eventId}")
+    public ResponseEntity<GetEventDetailsResponseDto> getEvent(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID eventId
+    ) {
+        UUID userId = parseUserId(jwt);
+        return eventService.getEventForOrganizer(userId, eventId)
+                .map(eventObj -> eventMapper.toGetEventDetailsResponseDto(eventObj))
+                .map(dto -> ResponseEntity.ok(dto))
+                .orElse(ResponseEntity.notFound().build()); // 404 Error
+    }
+    // .map takes the Event object in Optional<Event> and applies the lambda function. I.e. mapping it to the DTO
+    // then it ResponseEntity.ok(dto) will wrap the dto with the ResponseEntity.Ok message
 
     private UUID parseUserId(Jwt jwt) {
         return UUID.fromString(jwt.getSubject());
