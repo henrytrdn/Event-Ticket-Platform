@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -65,4 +66,10 @@ public class EventServiceImpl implements EventService {
     // Pageable object defines the Page Number (which page you want), Page Size (how many records per page), Sorting (sort order & fields)
     // E.g. Frontend requests -> GET /events?organizerId=123&page=0&size=5&sort=date,desc
     // Spring will build a Pageable object with page = 0, size = 5, sort by date descending
+
+    @Override
+    public Optional<Event> getEventForOrganizer(UUID organizerId, UUID id) {
+        return eventRepository.findByIdAndOrganizerId(id, organizerId);
+    }
+
 }

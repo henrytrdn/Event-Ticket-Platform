@@ -47,7 +47,10 @@ public class EventController {
     ) {
         UUID userId = parseUserId(jwt);
         Page<Event> events = eventService.listEventsForOrganizer(userId, pageable);
-        return ResponseEntity.ok(events.map(eventMapper::toListEventResponseDto));
+        return ResponseEntity.ok(events.map(event -> eventMapper.toListEventResponseDto(event)));
+        // Map method means convert each element inside the page to another object
+        // This preserves the Page metadata such as total pages, total elements, page number
+        // Runs the lambda method inside to map each Event to ListEventResponseDto,
     }
 
     private UUID parseUserId(Jwt jwt) {
