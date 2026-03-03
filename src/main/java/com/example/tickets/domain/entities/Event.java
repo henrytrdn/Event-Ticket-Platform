@@ -63,7 +63,7 @@ public class Event {
     private List<User> staff = new ArrayList<>();
 
     // Relationship with TicketType
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)  // Non owning entity. This Event entity is mapped by the field named "event" in the TicketType class
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)  // Non owning entity. This Event entity is mapped by the field named "event" in the TicketType class
     private List<TicketType> ticketTypes = new ArrayList<>();
 
 

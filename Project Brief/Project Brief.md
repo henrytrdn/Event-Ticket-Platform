@@ -485,3 +485,27 @@ This means the client receives JSON like:
 }
 ```
 This keeps error responses clean and consistent.
+
+# Update Event Endpoint
+existingEvent.getTicketTypes() and the TicketTypes stored in UpdateEventRequest have 3 possible states
+1) **Existing has more than Request**
+* DB: A, B, C
+* Request: A, B
+* Update A, B
+* Remove C (because its id is not in requestTicketTypeIds)
+* Result: A, B
+
+2) **Same items**
+* DB: A, B, C
+* Request: A, B, C
+* Update A, B, C
+* Remove none
+* Create none
+* Result: A, B, C
+
+3) **Existing has fewer than request**
+* DB: A, B, C
+* Request: A, B, C, * (new ticket type with id=null)
+* Update A, B, C
+* Create the new one (assign it a new generated ID when saving)
+* Result: A, B, C, D (newly created one)
