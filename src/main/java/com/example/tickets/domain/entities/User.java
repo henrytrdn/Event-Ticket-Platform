@@ -30,7 +30,7 @@ public class User {
     private String email;
 
     // TODO: Organized events
-    @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL) // Any changes made to Event that User references is saved
+    @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL) // Allows us to delete all events the user references
     private List<Event> organizedEvents = new ArrayList<>();
 
     // TODO: Attending events

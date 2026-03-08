@@ -84,6 +84,17 @@ public class EventController {
     // .map takes the Event object in Optional<Event> and applies the lambda function. I.e. mapping it to the DTO
     // then it ResponseEntity.ok(dto) will wrap the dto with the ResponseEntity.Ok message
 
+    @DeleteMapping(path = "/{eventId}")
+    public ResponseEntity<Void> deleteEvent(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID eventId
+    ) {
+        UUID userId = parseUserId(jwt);
+        eventService.deleteEventForOrganizer(userId, eventId);
+        return ResponseEntity.noContent().build();
+    }
+
+
     private UUID parseUserId(Jwt jwt) {
         return UUID.fromString(jwt.getSubject());
     }

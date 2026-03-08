@@ -22,7 +22,7 @@ public class Event {
 
     @Id
     @Column(name = "id", updatable = false, nullable = false)
-    @GeneratedValue(strategy = GenerationType.UUID) // Generates a random UUID when id is null
+    @GeneratedValue(strategy = GenerationType.UUID) // When ID is null, generate a random 128-bit value represented as a string of hexadecimal characters separated by dashes
     private UUID id;
 
     @Column(name = "name", nullable = false)
