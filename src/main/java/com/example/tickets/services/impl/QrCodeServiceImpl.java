@@ -57,12 +57,16 @@ public class QrCodeServiceImpl implements QrCodeService {
                 BarcodeFormat.QR_CODE,
                 QR_WIDTH,
                 QR_HEIGHT
-        );
+        );  // Encodes unique UUID into a QR Code from ZXing library. Stored in the Matrix, BitMatrix of 0's and 1's
+        // 1 = Black pixel, 0 = White pixel
 
         BufferedImage qrCodeImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
+        // A BufferedImage is a real image made of pixels.
+        // Each pixel stores color information, not just 0 or 1.
+        // We store RGB values instead, e.g. (0,0,0) or (255, 255, 255)
 
         try(ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            ImageIO.write(qrCodeImage, "PNG", baos);
+            ImageIO.write(qrCodeImage, "PNG", baos);    // Export the Image into a PNG
             byte[] imageBytes = baos.toByteArray();
 
             return Base64.getEncoder().encodeToString(imageBytes);
