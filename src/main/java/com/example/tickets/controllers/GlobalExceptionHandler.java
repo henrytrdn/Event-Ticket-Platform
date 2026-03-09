@@ -1,10 +1,7 @@
 package com.example.tickets.controllers;
 
 import com.example.tickets.domain.dtos.ErrorDto;
-import com.example.tickets.exceptions.EventNotFoundException;
-import com.example.tickets.exceptions.EventUpdateException;
-import com.example.tickets.exceptions.TicketTypeNotFoundException;
-import com.example.tickets.exceptions.UserNotFoundException;
+import com.example.tickets.exceptions.*;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,6 +17,14 @@ import java.util.List;
 @RestControllerAdvice   // Tells Spring to look here on how to handle certain exceptions
 @Slf4j  // Logger
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(QrCodeGenerationException.class)  // Triggers when UserNotFoundException raises
+    public ResponseEntity<ErrorDto> handleQrCodeGenerationException(QrCodeGenerationException ex) {
+        log.error("Caught QrCodeGenerationException", ex);
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setError("Unable to generate QR Code");
+        return new ResponseEntity<>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     @ExceptionHandler(EventUpdateException.class)  // Triggers when UserNotFoundException raises
     public ResponseEntity<ErrorDto> handleEventUpdateException(EventUpdateException ex) {
