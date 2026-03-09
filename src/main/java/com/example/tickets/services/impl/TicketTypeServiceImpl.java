@@ -52,7 +52,7 @@ public class TicketTypeServiceImpl implements TicketTypeService {
         Ticket ticket = new Ticket();
         ticket.setStatus(TicketStatusEnum.PURCHASED);
         ticket.setTicketType(ticketType);
-        ticket.setPurchaser(user);
+        ticket.setPurchaser(user);  // Updating the Owning side of the relationship is enough for JPA persistence
 
         Ticket savedTicket = ticketRepository.save(ticket);
         qrCodeService.generateQrCode(savedTicket);

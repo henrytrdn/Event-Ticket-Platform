@@ -32,6 +32,9 @@ public class User {
     // TODO: Organized events
     @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL) // Allows us to delete all events the user references
     private List<Event> organizedEvents = new ArrayList<>();
+    // Normally the owning side maintains the reference to the other entity.
+    // E.g. The Event will maintain a FK reference to the User. Hence, the list of organizedEvents will always be empty
+    // We can update it to maintain the list of organizedEvents, but this is just for consistency in Java's memory
 
     // TODO: Attending events
     @ManyToMany
