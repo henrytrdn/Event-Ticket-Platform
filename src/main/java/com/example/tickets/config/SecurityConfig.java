@@ -25,6 +25,7 @@ public class SecurityConfig {
                         authorize
                                 // Allow all published-events endpoints to pass through without authentication
                                 .requestMatchers(HttpMethod.GET, "/api/v1/published-events/**").permitAll()
+                                .requestMatchers("/api/v1/events").hasRole("ORGANIZER")
                                 // All other endpoints must be authenticated
                                 .anyRequest().authenticated())
                 .csrf(csrf -> csrf.disable())
