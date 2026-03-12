@@ -35,14 +35,16 @@ public class TicketValidationServiceImpl implements TicketValidationService {
 
         Ticket ticket = qrCode.getTicket();
 
-        return validateTicket(ticket);
+        return validateTicket(ticket, TicketValidationMethodEnum.QR_SCAN);
 
     }
 
-    private TicketValidation validateTicket(Ticket ticket) {
+    // Validate Ticket by creating and referencing a TicketValidation object
+    private TicketValidation validateTicket(Ticket ticket,
+            TicketValidationMethodEnum ticketValidationMethodEnum) {
         TicketValidation ticketValidation = new TicketValidation();
         ticketValidation.setTicket(ticket);
-        ticketValidation.setValidationMethod(TicketValidationMethodEnum.QR_SCAN);
+        ticketValidation.setValidationMethod(ticketValidationMethodEnum);
 
         TicketValidationStatusEnum ticketValidationStatus = ticket.getValidations().stream()
                 .filter(validations -> TicketValidationStatusEnum.VALID.equals(validations.getStatus()))
@@ -60,6 +62,6 @@ public class TicketValidationServiceImpl implements TicketValidationService {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new TicketNotFoundException());
 
-        return validateTicket(ticket);
+        return validateTicket(ticket, TicketValidationMethodEnum.MANUAL);
     }
 }
