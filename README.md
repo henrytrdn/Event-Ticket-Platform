@@ -98,6 +98,3 @@ Run unit and integration tests using Maven:
 3. Commit your changes and push to your fork
 4. Open a pull request with a clear description of your changes
 
-## License
-
-Specify license information here if applicable.
